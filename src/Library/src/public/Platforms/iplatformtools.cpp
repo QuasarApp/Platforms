@@ -22,22 +22,22 @@ IPlatformTools *IPlatformTools::instance() {
 
 #ifdef Q_OS_LINUX
 #ifdef Q_OS_ANDROID
-    static IPlatformTools * instance = new AndroidPlatformTools();
+    instance = new AndroidPlatformTools();
 #else
 
 #endif
 #endif
 
 #ifdef Q_OS_WINDOWS
-    static IPlatformTools * instance = new WindowsDesktopPlatformTool();
+    instance = new WindowsDesktopPlatformTool();
 #endif
 
 #ifdef Q_OS_MACOS
-    static IPlatformTools * instance = new OSXPlatformTools();
+    instance = new OSXPlatformTools();
 #endif
 
 #ifdef Q_OS_IOS
-    static IPlatformTools * instance = new IOSPlatformTools();
+    instance = new IOSPlatformTools();
 #endif
 
     return instance;

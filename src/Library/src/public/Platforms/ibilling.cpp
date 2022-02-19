@@ -19,7 +19,7 @@ IBilling *IBilling::instance() {
 
 #ifdef Q_OS_LINUX
 #ifdef Q_OS_ANDROID
-    static IBilling * instance = new AndroidBilling();
+    instance = new AndroidBilling();
 #else
 #endif
 #endif
