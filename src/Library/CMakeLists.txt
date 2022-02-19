@@ -59,9 +59,16 @@ if (ANDROID)
         target_link_libraries(${PROJECT_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::AndroidExtras)
     endif()
 
-    add_custom_target(copy_java_depends_of_platform ALL
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src/Library/src/android/src ${ANDROID_PACKAGE_SOURCE_DIR}/src
-        DEPENDS ${PROJECT_NAME}
-        )
+    if (EXISTS "${ANDROID_PACKAGE_SOURCE_DIR}")
 
+        add_custom_target(copy_java_depends_of_platform ALL
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/src/Library/src/android/src" "${ANDROID_PACKAGE_SOURCE_DIR}/src"
+            DEPENDS ${PROJECT_NAME}
+            )
+    else()
+
+        message(SEND_ERROR "The ANDROID_PACKAGE_SOURCE_DIR variable are not defined.
+            Pleasse set ANDROID_PACKAGE_SOURCE_DIR before build ${PROJECT_NAME} library")
+
+    endif()
 endif()
