@@ -18,6 +18,8 @@ file(GLOB SOURCE_CPP
     "src/public/*.h"
     "src/public/Platforms/*.h"
     "src/private/*.h"
+
+    "src/android/src/com/quasarapp/androidtools/*.java"
 )
 
 if (${QT_VERSION_MAJOR})
