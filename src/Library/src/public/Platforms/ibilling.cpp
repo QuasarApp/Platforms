@@ -15,24 +15,22 @@ IBilling::IBilling() {
 }
 
 IBilling *IBilling::instance() {
+    static IBilling * instance = nullptr;
+
 #ifdef Q_OS_LINUX
 #ifdef Q_OS_ANDROID
     static IBilling * instance = new AndroidBilling();
 #else
-    static IBilling * instance = nullptr;
 #endif
 #endif
 
 #ifdef Q_OS_WINDOWS
-    static IBilling * instance = nullptr;
 #endif
 
 #ifdef Q_OS_MACOS
-    static IBilling * instance = nullptr;
 #endif
 
 #ifdef Q_OS_IOS
-    static IBilling * instance = nullptr;
 #endif
 
     return instance;

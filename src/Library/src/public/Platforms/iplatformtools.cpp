@@ -18,12 +18,13 @@
 namespace Platforms {
 
 IPlatformTools *IPlatformTools::instance() {
+    static IPlatformTools * instance = new LinuxDesktopPlatfomTools();
 
 #ifdef Q_OS_LINUX
 #ifdef Q_OS_ANDROID
     static IPlatformTools * instance = new AndroidPlatformTools();
 #else
-    static IPlatformTools * instance = new LinuxDesktopPlatfomTools();
+
 #endif
 #endif
 
