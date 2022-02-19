@@ -67,7 +67,7 @@ if (ANDROID)
             )
     else()
 
-        message(SEND_ERROR "The ANDROID_PACKAGE_SOURCE_DIR variable are not defined.
+        message(WARNING "The ANDROID_PACKAGE_SOURCE_DIR variable are not defined.
             Pleasse set ANDROID_PACKAGE_SOURCE_DIR before build ${PROJECT_NAME} library")
 
     endif()
