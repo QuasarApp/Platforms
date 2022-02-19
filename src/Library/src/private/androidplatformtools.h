@@ -12,7 +12,7 @@
 #include <Platforms/iplatformtools.h>
 
 #ifdef Q_OS_ANDROID
-namespace RC {
+namespace Platforms {
 class AndroidPlatformTools: public IPlatformTools
 {
     // IPlatformTools interface

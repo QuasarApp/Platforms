@@ -10,7 +10,7 @@
 
 #include <QtCore/qglobal.h>
 
-#define PLATFORMS_VERSION "0.1.29d91f8"
+#define PLATFORMS_VERSION "0.2.a960be6"
 
 #if defined(PLATFORMS_LIBRARY)
 #  define PLATFORMS_EXPORT Q_DECL_EXPORT
