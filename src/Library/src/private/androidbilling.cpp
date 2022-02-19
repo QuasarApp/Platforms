@@ -34,7 +34,7 @@ void AndroidBilling::becomeSeller() {
 }
 
 void AndroidBilling::handlePurchaseReceived(QString id, QString token) {
-    RC::Purchase purchase;
+    Platforms::Purchase purchase;
     purchase.id = id;
     purchase.token = token;
     emit sigPurchaseReceived(purchase);

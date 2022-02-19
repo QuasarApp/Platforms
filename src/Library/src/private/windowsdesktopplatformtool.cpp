@@ -16,7 +16,7 @@ WindowsDesktopPlatformTool::WindowsDesktopPlatformTool()
 
 }
 
-void RC::WindowsDesktopPlatformTool::setScreanDim(bool ) const {
+void WindowsDesktopPlatformTool::setScreanDim(bool ) const {
     // to-do
 }
 

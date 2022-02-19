@@ -19,7 +19,7 @@
 
 class JavaProvider;
 
-class AndroidBilling : public RC::IBilling
+class AndroidBilling : public Platforms::IBilling
 {
     Q_OBJECT
 
