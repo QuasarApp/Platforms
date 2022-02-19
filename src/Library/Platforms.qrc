@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/"/>
+    <qresource prefix="/PlatformsTr">
+        <file>languages/en.qm</file>
+    </qresource>
+</RCC>

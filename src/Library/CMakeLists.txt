@@ -7,16 +7,16 @@
 
 cmake_minimum_required(VERSION 3.14)
 
-add_definitions(-DRENAME_ME_LIBRARY)
+add_definitions(-DPLATFORMS_LIBRARY)
 
 
 file(GLOB SOURCE_CPP
     "src/public/*.cpp"
-    "src/public/RENAME_ME/*.cpp"
+    "src/public/Platforms/*.cpp"
     "src/private/*.cpp"
 
     "src/public/*.h"
-    "src/public/RENAME_ME/*.h"
+    "src/public/Platforms/*.h"
     "src/private/*.h"
 )
 
@@ -47,5 +47,14 @@ prepareQM(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR} "${LANGS}")
 
 set(QML_IMPORT_PATH ${QML_IMPORT_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/src" CACHE STRING "" FORCE)
 
-set(global_file "${CMAKE_CURRENT_SOURCE_DIR}/src/public/RENAME_ME/global.h")
+set(global_file "${CMAKE_CURRENT_SOURCE_DIR}/src/public/Platforms/global.h")
 configure_file("${global_file}.in" ${global_file} @ONLY)
+
+if (ANDROID)
+
+    add_custom_target(copy_java_depends_of_platform ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src/Library/src/android/src ${ANDROID_PACKAGE_SOURCE_DIR}/src
+        DEPENDS ${PROJECT_NAME}
+        )
+
+endif()
