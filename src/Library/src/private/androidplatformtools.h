@@ -12,6 +12,10 @@
 #include <Platforms/iplatformtools.h>
 
 #ifdef Q_OS_ANDROID
+
+class JavaProvider;
+
+
 namespace Platforms {
 class AndroidPlatformTools: public IPlatformTools
 {
@@ -23,8 +27,9 @@ public:
 
 protected:
     AndroidPlatformTools();
-
     friend class IPlatformTools;
+
+    JavaProvider *_javaProvider = nullptr;
 
 
 };

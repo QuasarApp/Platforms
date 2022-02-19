@@ -9,18 +9,7 @@
 package com.quasarapp.androidtools;
 
 import android.app.Activity;
-
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClientStateListener;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsParams;
-import com.android.billingclient.api.SkuDetailsResponseListener;
-import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.PurchasesResponseListener;
-import com.android.billingclient.api.Purchase.PurchaseState;
+import com.quasarapp.androidtools.IProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,24 +17,20 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ScreenController {
+public class ScreenController extends IProvider {
 
     public ScreenController(Activity activityContext) {
-        m_acrivityContext = activityContext;
-    }
-
-    public void setCppProvider(CppProvider provider) {
-        m_provider = provider;
+        super(activityContext);
     }
 
     // see google docs https://developer.android.com/reference/android/view/Window
     public void clearWindowFlagAsync(int flag) {
         
-        if (m_acrivityContext == null)
+        if (getActivity() == null)
             return;
 
         //perform heavy task here and finally update the UI with result this way -
-        m_acrivityContext.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Window decorView = getWindow();
@@ -56,11 +41,11 @@ public class ScreenController {
 
     public void addWindowFlagAsync(int flag) {
 
-        if (m_acrivityContext == null)
+        if (getActivity() == null)
             return;
             
         //perform heavy task here and finally update the UI with result this way -
-        m_acrivityContext.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Window decorView = getWindow();
@@ -68,9 +53,5 @@ public class ScreenController {
             }
         });
     }
-
-
-    private Activity m_acrivityContext;
-    private CppProvider m_provider;
 
 }

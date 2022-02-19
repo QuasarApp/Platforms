@@ -10,20 +10,27 @@ package com.quasarapp.androidtools;
 import android.app.Activity;
 import com.quasarapp.androidtools.BillingProcessor;
 import com.quasarapp.androidtools.ScreenController;
+import com.quasarapp.androidtools.AndroidUtils;
 
 public class CppProvider {
 
 public CppProvider() {
-    billingProcessor.setCppProvider(this);
     providerContext = this;
 }
 
 public void setBillingProcessor(BillingProcessor billing) {
     billingProcessor = billing;
+    billingProcessor.setCppProvider(this);
 }
 
 public void setScreenController(ScreenController screen) {
     screenController = screen;
+    screenController.setCppProvider(this);
+}
+
+public void setUtils(AndroidUtils utils) {
+    androidUtils = screen;
+    androidUtils.setCppProvider(this);
 }
 
 public void getPremiumP(String id) {
@@ -64,6 +71,16 @@ private static void initBilling() {
     }
 }
 
+private static boolean addPermision(String permision) {
+    if (androidUtils == null) {
+        System.out.println("Failed to sets window flag, please init AndroidUtils before use. For initialize billing invoke the setUtils method.");
+        return false;
+    }
+
+    return androidUtils.addPermision(permision);
+
+}
+
 private static void setWindowFlags(int flag, boolean enable) {
     if (screenController == null) {
         System.out.println("Failed to sets window flag, please init screenController before use. For initialize billing invoke the setScreenController method.");
@@ -79,6 +96,8 @@ private static void setWindowFlags(int flag, boolean enable) {
 
 private BillingProcessor billingProcessor;
 private ScreenController screenController;
+private AndroidUtils androidUtils;
+
 private static CppProvider providerContext;
 
 }

@@ -9,6 +9,7 @@
 package com.quasarapp.androidtools;
 
 import android.app.Activity;
+import com.quasarapp.androidtools.IProvider;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -28,19 +29,17 @@ import java.util.List;
 import java.util.Map;
 
 
-public class BillingProcessor {
+public class BillingProcessor extends IProvider {
 
-    public BillingProcessor(Activity activityContext, ArrayList<String> subs, ArrayList<String> inapp) {
-        m_acrivityContext = activityContext;
+    public BillingProcessor(Activity activityContext,
+    ArrayList<String> subs, ArrayList<String> inapp) {
+        super(activityContext)
         subsItems = subs;
         inapItems = inapp;
     }
 
     public void initBilling() {
-
-
-
-        billingClient = BillingClient.newBuilder(m_acrivityContext).setListener(new PurchasesUpdatedListener() {
+        billingClient = BillingClient.newBuilder(getActivity()).setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
                 workWithIncomingData(billingResult, purchases);
@@ -62,11 +61,6 @@ public class BillingProcessor {
                 }
             }
         });
-    }
-
-    public void setCppProvider(CppProvider provider) {
-        m_provider = provider;
-
     }
 
     private void querySkuSubsDetails() {
@@ -124,7 +118,7 @@ public class BillingProcessor {
                     .setSkuDetails(mSkuDetailsMap.get(item))
                     .build();
 
-            billingClient.launchBillingFlow(m_acrivityContext, billingFlowParams);
+            billingClient.launchBillingFlow(getActivity(), billingFlowParams);
         }
     }
 
@@ -157,10 +151,10 @@ public class BillingProcessor {
                     continue;
                 }
 
-                if (m_provider != null) {
+                if (getProvider() != null) {
                     ArrayList<String> list = purchase.getSkus();
                     for (String id : list) {
-                        m_provider.sendPurchaseToApp(id ,purchase.getPurchaseToken(), purchase.getQuantity());
+                        getProvider().sendPurchaseToApp(id ,purchase.getPurchaseToken(), purchase.getQuantity());
                     }
                 }
             }
@@ -170,8 +164,6 @@ public class BillingProcessor {
     private Map<String, SkuDetails> mSkuDetailsMap = new HashMap<>();
 
     private BillingClient billingClient;
-    private Activity m_acrivityContext;
-    private CppProvider m_provider;
     
     private ArrayList<String> subsItems;
     private ArrayList<String> inapItems;

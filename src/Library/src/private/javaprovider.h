@@ -12,7 +12,12 @@
 
 #ifdef Q_OS_ANDROID
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+#include <QJniObject>
+#else
 #include <QAndroidJniObject>
+#endif
+
 #include <QObject>
 
 class JavaProvider : public QObject
@@ -21,8 +26,10 @@ class JavaProvider : public QObject
 
 public:
     static JavaProvider* instance();
-    void getPremium() const;
+    void getBillingItem(const QString& item) const;
     void initBilling() const;
+    void setWindowFlags(int flag, bool enable) const;
+    bool addPermision(const QString& permisionName) const;
 
 signals:
     void sigPurchase(QString id, QString token);

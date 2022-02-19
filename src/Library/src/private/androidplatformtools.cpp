@@ -7,55 +7,50 @@
 
 
 #include "androidplatformtools.h"
+#include <QCoreApplication>
 
 #ifdef Q_OS_ANDROID
 
+#include "javaprovider.h"
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+#include <QJniEnvironment>
+#include <QJniObject>
+#include <QJniEnvironment>
+#define JENV QJniEnvironment
+#define JOBJ QJniObject
+
+#else
+#include <QAndroidJniEnvironment>
 #include <QtAndroid>
 #include <QAndroidJniObject>
 #include <QAndroidJniEnvironment>
-#include <QDebug>
+
+#define JENV QAndroidJniEnvironment
+#define JOBJ QAndroidJniObject
+
+#endif
+#include <QObject>
 
 namespace Platforms {
 
 AndroidPlatformTools::AndroidPlatformTools() {
-
+    _javaProvider = JavaProvider::instance();
 }
 
 void AndroidPlatformTools::setScreanDim(bool enable) const {
-    QAndroidJniObject activity = QtAndroid::androidActivity();
-    if (activity.isValid()) {
-        const int FLAG_KEEP_SCREEN_ON = 128;
-
-        if (enable) {
-            activity.callMethod<void>("clearWindowFlagAsync", "(I)V", FLAG_KEEP_SCREEN_ON);
-        } else {
-            activity.callMethod<void>("addWindowFlagAsync", "(I)V", FLAG_KEEP_SCREEN_ON);
-        }
-    }
+    const int FLAG_KEEP_SCREEN_ON = 128;
+    _javaProvider->setWindowFlags(FLAG_KEEP_SCREEN_ON, enable);
 }
 
 bool AndroidPlatformTools::getAccessToWriteInStorage() {
-    if (QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE")) == QtAndroid::PermissionResult::Denied){
-        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
-        if (resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied) {
-            return false;
-        }
-    }
 
-    return true;
+    return _javaProvider->addPermision("android.permission.WRITE_EXTERNAL_STORAGE");
 }
 
 bool AndroidPlatformTools::getAccessToReadInStorage() {
-    if (QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE")) == QtAndroid::PermissionResult::Denied){
-        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(
-                    QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
+    return _javaProvider->addPermision("android.permission.READ_EXTERNAL_STORAGE");
 
-        if (resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 }

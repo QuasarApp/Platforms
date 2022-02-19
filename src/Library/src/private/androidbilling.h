@@ -12,7 +12,6 @@
 
 #ifdef Q_OS_ANDROID
 
-#include <QAndroidJniObject>
 #include <QObject>
 
 #include <Platforms/ibilling.h>
@@ -29,7 +28,8 @@ public:
     void init() override;
 
 public slots:
-    void becomeSeller() override;
+    void getItem(const QString &itemID) override;
+
     bool isSupported() override;
 
 private slots:

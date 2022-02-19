@@ -10,11 +10,32 @@
 
 
 #ifdef Q_OS_ANDROID
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+
+#include <QJniEnvironment>
+#define JENV QJniEnvironment
+#define JOBJ QJniObject
+
+#else
+
 #include <QAndroidJniEnvironment>
+#define JENV QAndroidJniEnvironment
+#define JOBJ QAndroidJniObject
+
+#endif
 
 JavaProvider *JavaProvider::instance() {
     static JavaProvider* instance = new JavaProvider();
     return instance;
+}
+
+void JavaProvider::getBillingItem(const QString &item) const {
+    auto javaItem = JOBJ::fromString(item);
+    JOBJ::callStaticMethod<void>("com/quasarapp/androidtools/CppProvider",
+                                 "setWindowFlags",
+                                 "(Ljava/lang/String)V",
+                                 javaItem.object<jstring>());
 }
 
 JavaProvider::JavaProvider() {
@@ -23,8 +44,8 @@ JavaProvider::JavaProvider() {
         {"purchaseReceived", "(Ljava/lang/String;Ljava/lang/String;)V", reinterpret_cast<void *>(purchaseReceived)},
     };
 
-    QAndroidJniObject javaClass("com/quasarapp/androidtools/CppProvider");
-    QAndroidJniEnvironment env;
+    JOBJ javaClass("com/quasarapp/androidtools/CppProvider");
+    JENV env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     env->RegisterNatives(objectClass,
                          methods,
@@ -33,18 +54,25 @@ JavaProvider::JavaProvider() {
 
 }
 
-void JavaProvider::getPremium() const {
-    // C++ code
-    QAndroidJniObject::callStaticMethod<void>("com/quasarapp/androidtools/CppProvider",
-                                              "getPremium",
-                                              "()V");
-
+void JavaProvider::initBilling() const {
+    JOBJ::callStaticMethod<void>("com/quasarapp/androidtools/CppProvider",
+                                 "initBilling",
+                                 "()V");
 }
 
-void JavaProvider::initBilling() const {
-    QAndroidJniObject::callStaticMethod<void>("com/quasarapp/androidtools/CppProvider",
-                                              "initBilling",
-                                              "()V");
+void JavaProvider::setWindowFlags(int flag, bool enable) const {
+    JOBJ::callStaticMethod<void>("com/quasarapp/androidtools/CppProvider",
+                                 "setWindowFlags", "(IZ)V", flag, enable);
+}
+
+bool JavaProvider::addPermision(const QString &permisionName) const {
+    auto javaItem = JOBJ::fromString(permisionName);
+    jboolean result = JOBJ::callStaticMethod<jboolean>("com/quasarapp/androidtools/CppProvider",
+                                     "addPermision",
+                                     "(Ljava/lang/String)Z",
+                                     javaItem.object<jstring>());
+    return result;
+
 }
 
 void JavaProvider::purchaseReceived(JNIEnv *env, jobject thiz, jstring id, jstring token) {

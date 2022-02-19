@@ -30,7 +30,7 @@ public:
     virtual void init() = 0;
 
 public slots:
-    virtual void becomeSeller() = 0;
+    virtual void getItem(const QString &itemID) = 0;
     virtual bool isSupported() = 0;
 
 signals:
