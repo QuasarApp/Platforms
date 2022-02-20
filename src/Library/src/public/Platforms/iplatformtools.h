@@ -15,18 +15,23 @@ namespace Platforms {
 
 
 /**
- * @brief The IPlatformTools class
+ * @brief The IPlatformTools class contains platform dependet utils.
  */
 class PLATFORMS_EXPORT IPlatformTools
 {
 public:
     virtual ~IPlatformTools() = default;
 
+    /**
+     * @brief instance This method return platform's dependet billing object. If this library not support current platform then return nullptr.
+     * @return platform's dependet billing object
+     * @note If this library not support current platform then return nullptr.
+     */
     static IPlatformTools* instance();
 
     /**
      * @brief setScreanDim disable or enable screan dim
-     * @param enable
+     * @param enable sets to true for enable sceen dim or false for disable.
      */
     virtual void setScreanDim(bool enable) const = 0;
 
