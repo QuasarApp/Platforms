@@ -7,9 +7,17 @@
 
 #include "Platforms/global.h"
 #include <QString>
+#include "Platforms/ibilling.h"
+#include "Platforms/iplatformtools.h"
 
 inline void initPlatformsResources() { Q_INIT_RESOURCE(Platforms); }
 
+/**
+ * @brief Platforms This namespace contains classes that help work with different platforms.
+ * See IBilling and IPlatformTools interfaces.
+ *
+ *
+ */
 namespace Platforms {
 
 /**
