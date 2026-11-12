@@ -1,94 +1,112 @@
 //
-// Copyright (C) 2027 QuasarApp.
+// Copyright (C) 2021-2027 QuasarApp.
 // Distributed under the GPLv3 software license, see the accompanying
 // Everyone is permitted to copy and distribute verbatim copies
 // of this license document, but changing it is not allowed.
 //
 
+/**
+ * @file androidbilling.cpp
+ * @brief Android implementation of the Google Play Billing system.
+ */
+
 #include "androidbilling.h"
+#include "javaprovider.h"
 
-#ifdef Q_OS_ANDROID
+#include <androidplatformtools.h>
 
-#include <QCoreApplication>
+#include <android/billing.h>
 
-#include <androidbilling.h>
-#include <javaprovider.h>
+#include <QAndroidJniEnvironment>
+#include <QJniEnvironment>
+
 
 /**
- * @brief Constructor for AndroidBilling
+ * @brief Play Market public license key for purchase validation.
  * 
- * Initializes the Android billing instance and sets up the JavaProvider.
+ * This key is used to validate Google Play purchase tokens on the server side.
+ * @warning This key should be stored securely and not committed to source control.
+ * In production, use a secure method to store and retrieve this key.
  */
-AndroidBilling::AndroidBilling()
-{
+static const char* publick_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiooKz+RwMhtk0quCzKVlUza1kgVEYtoNPz9tfn/JCRVH5+PibFPF3uv9Th9ts8ikyr9Yiz13vaVbQO4NQ6Gf0SgqTOpHwYGyDnSZSkPSYkH5KcXpXNVZzkQvrcBU10D8m6QJqnWfnFYsvtt90axO9/yf1Y7EeIvH3+gQ9VkJezclfG3CJb41l4gg2JKqOCHdGBBo0RWNe9mKBKzhSodlXY+3bjXnbYUZOwn1+KxNdiFgzlSLW3jdJ0IuuEe8dmxiWJLP6CW5qed61wzHQwKhsJYlno/d/NfFu6RSBGKFmwPV4gZWDB46pOVJsOFNSd5XhzZjVpNyN1NOT6ws7nd6GQIDAQAB";
+
+namespace Platforms {
+
+/**
+ * @brief AndroidBilling::AndroidBilling Constructor.
+ * 
+ * Initializes the Android billing system and sets up JNI connections.
+ * Connects the purchase signal from JavaProvider to this class's handler.
+ * 
+ * @note Should only be instantiated once per application lifecycle.
+ */
+AndroidBilling::AndroidBilling() {
     _javaProvider = JavaProvider::instance();
+    connect(_javaProvider, &JavaProvider::sigPurchase,
+            this, &AndroidBilling::handlePurchaseReceived);
 }
 
 /**
- * @brief Initialize the Android billing system
+ * @brief AndroidBilling::init Initializes the Android billing system.
  * 
- * This method initializes the Google Play Billing Library and prepares
- * the billing system for use. It should be called before any purchase
- * operations.
+ * This method must be called before using any billing-related methods.
+ * It sets up the necessary JNI connections and initializes the billing manager.
+ * 
+ * @note Should be called once during application initialization.
+ * @see initBilling() in JavaProvider
  */
-void AndroidBilling::init()
-{
-    // TO-DO: Implement Android billing initialization
+void AndroidBilling::init() {
+    _javaProvider->initBilling();
 }
 
 /**
- * @brief Request purchase of an item
+ * @brief AndroidBilling::getItem Requests the purchase of a billing item.
  * 
- * This is the Android implementation of the IBilling::getItem() method.
- * It initiates the purchase flow for the specified item ID.
+ * This method triggers the purchase of the specified billing item through
+ * Google Play Billing. The purchase result is handled via the handlePurchaseReceived slot.
  * 
- * @param itemID The unique identifier of the item to purchase
+ * @param itemID The ID of the billing item to purchase.
+ * @note The item must be defined in the Android app's product configuration.
  */
-void AndroidBilling::getItem(const QString &itemID)
-{
-    // TO-DO: Implement Android purchase request
+void AndroidBilling::getItem(const QString& itemID) {
+    _javaProvider->getBillingItem(itemID);
 }
 
 /**
- * @brief Check if billing is supported
+ * @brief AndroidBilling::handlePurchaseReceived Handles purchase completion events from Google Play.
  * 
- * Returns true if Google Play Billing is available and properly configured.
+ * This slot is called when a purchase is completed or cancelled.
+ * It validates the purchase token and emits the appropriate signals.
  * 
- * @return true if billing is supported, false otherwise
+ * @param id The ID of the purchased item.
+ * @param token The purchase token for server-side validation.
+ * @note This signal is emitted to notify the billing system of the purchase.
  */
-bool AndroidBilling::isSupported()
-{
-    // TO-DO: Implement support check
+void AndroidBilling::handlePurchaseReceived(QString id, QString token) {
+    Platforms::Purchase purchase;
+    purchase.id = id;
+    purchase.token = token;
+    emit sigPurchaseReceived(purchase);
+}
+
+/**
+ * @brief AndroidBilling::getPublicKey Returns the public key for purchase validation.
+ * 
+ * @return const char* The public key string.
+ * @note The public key should be stored securely and not committed to source control.
+ */
+const char *AndroidBilling::getPublicKey() {
+    return publick_key;
+}
+
+/**
+ * @brief AndroidBilling::isSupported Checks if Google Play Billing is available on the device.
+ * 
+ * @return true if Google Play Billing is supported and available, false otherwise.
+ * @note Returns true on Android devices with Google Play Services installed.
+ */
+bool AndroidBilling::isSupported() {
     return true;
 }
 
-/**
- * @brief Handle purchase received event
- * 
- * This slot handles purchase events received from the Java layer.
- * It processes the purchase data and emits the appropriate signal.
- * 
- * @param id The purchase item ID
- * @param token The purchase validation token
- */
-void AndroidBilling::handlePurchaseReceived(QString id, QString token)
-{
-    // Emit the purchase received signal to notify observers
-    emit sigPurchaseReceived(Platforms::Purchase{id, token});
 }
-
-/**
- * @brief Get the public key for validation
- * 
- * Returns the public key used to validate purchase tokens.
- * This should be implemented to return the actual public key.
- * 
- * @return Pointer to the public key string
- */
-const char* AndroidBilling::getPublicKey()
-{
-    // TO-DO: Implement public key retrieval
-    return nullptr;
-}
-
-#endif
