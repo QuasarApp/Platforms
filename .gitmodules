@@ -1,0 +1,3 @@
+[submodule "Platforms_repo"]
+	path = Platforms_repo
+	url = https://github.com/QuasarApp/Platforms.git
