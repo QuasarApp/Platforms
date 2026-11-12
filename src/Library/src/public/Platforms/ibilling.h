@@ -165,7 +165,7 @@ signals:
      */
     void sigPurchaseReceived(const Purchase &purchase);
 
-}
+};
 
 Q_DECLARE_METATYPE(Platforms::Purchase)
 

@@ -128,7 +128,7 @@ private:
      * @param token The validation token as jstring
      */
     static void purchaseReceived(JNIEnv *env, jobject thiz, jstring id, jstring token);
-}
+};
 
 #endif
 

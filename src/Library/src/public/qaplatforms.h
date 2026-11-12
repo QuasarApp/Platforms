@@ -47,6 +47,8 @@ inline void initPlatformsResources() { Q_INIT_RESOURCE(Platforms); }
  * - Implementation classes for each supported platform
  */
 
+namespace Platforms {
+
 /**
  * @brief Initialize the main Platforms library
  * 
@@ -71,3 +73,5 @@ bool PLATFORMS_EXPORT init();
  * qDebug() << "Platforms version:" << version;
  */
 QString PLATFORMS_EXPORT version();
+
+} // namespace Platforms

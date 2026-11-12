@@ -13,9 +13,9 @@
 #ifdef Q_OS_ANDROID
 
 // Forward declaration
+class JavaProvider;
+
 namespace Platforms {
-    class JavaProvider;
-}
 
 /**
  * @class AndroidPlatformTools
@@ -98,7 +98,7 @@ protected:
 
 };
 
-}
+};
 
 #endif
 
