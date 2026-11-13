@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2027 QuasarApp.
+// Copyright (C) 2027 QuasarApp.
 // Distributed under the GPLv3 software license, see the accompanying
 // Everyone is permitted to copy and distribute verbatim copies
 // of this license document, but changing it is not allowed.
@@ -13,7 +13,9 @@
 #ifdef Q_OS_ANDROID
 
 // Forward declaration
-class JavaProvider;
+namespace Platforms {
+    class JavaProvider;
+}
 
 namespace Platforms {
 
