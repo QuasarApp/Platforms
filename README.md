@@ -136,3 +136,4 @@ Contributions are welcome! Please read our [contributing guide](https://github.c
 For support and questions, please open an issue on the [QuasarApp GitHub organization](https://github.com/QuasarApp).
 
 
+

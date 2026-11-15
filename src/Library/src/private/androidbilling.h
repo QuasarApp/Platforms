@@ -5,8 +5,8 @@
 //# of this license document, but changing it is not allowed.
 //#
 
-#ifndef ANDROICBILLING_H
-#define ANDROICBILLING_H
+#ifndef ANDROIDBILLING_H
+#define ANDROIDBILLING_H
 
 #include <QtGlobal>
 
