@@ -1,9 +1,10 @@
-//
-// 2021-2027 QuasarApp.
-// Distributed under the GPLv3 software license, see the accompanying
-// Everyone is permitted to copy and distribute verbatim copies
-// of this license document, but changing it is not allowed.
-//
+//#
+//# Copyright (C) 2021-2027 QuasarApp.
+//# Distributed under the GPLv3 software license, see the accompanying
+//# Everyone is permitted to copy and distribute verbatim copies
+//# of this license document, but changing it is not allowed.
+//#
+
 
 #ifndef AndroidPlatformTools_H
 #define AndroidPlatformTools_H
@@ -12,10 +13,7 @@
 
 #ifdef Q_OS_ANDROID
 
-// Forward declaration
-namespace Platforms {
-    class JavaProvider;
-}
+#include <javaprovider.h>
 
 /**
  * @class AndroidPlatformTools
@@ -29,8 +27,6 @@ namespace Platforms {
  * @note This class inherits from IPlatformTools and implements all required methods.
  * @note Requires Q_OS_ANDROID preprocessor condition to be defined.
  * @note Uses JavaProvider for JNI interactions with Android Java layer.
- * 
- * @since 3.0.0
  */
 class AndroidPlatformTools : public IPlatformTools
 {
@@ -96,10 +92,7 @@ protected:
      */
     JavaProvider *_javaProvider = nullptr;
 
-};
+}; // namespace Platforms
 
-}
-
-#endif
-
+#endif // Q_OS_ANDROID
 #endif // AndroidPlatformTools_H

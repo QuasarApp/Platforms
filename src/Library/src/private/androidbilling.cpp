@@ -1,39 +1,43 @@
-//
-// 2021-2027 QuasarApp.
-// Distributed under the GPLv3 software license, see the accompanying
-// Everyone is permitted to copy and distribute verbatim copies
-// of this license document, but changing it is not allowed.
-//
+//#
+//# Copyright (C) 2021-2027 QuasarApp.
+//# Distributed under the GPLv3 software license, see the accompanying
+//# Everyone is permitted to copy and distribute verbatim copies
+//# of this license document, but changing it is not allowed.
+//#
 
 #include "androidbilling.h"
+#include "javaprovider.h"
+
+
 
 #ifdef Q_OS_ANDROID
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+#include <QJniEnvironment>
+#else
+#include <QAndroidJniEnvironment>
+#endif
+#include <QObject>
 
-#include <QCoreApplication>
-
-#include <androidbilling.h>
-#include <javaprovider.h>
+// Play Market public license key.
+static const char* publick_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiooKz+RwMhtk0quCzKVlUza1kgVEYtoNPz9tfn/JCRVH5+PibFPF3uv9Th9ts8ikyr9Yiz13vaVbQO4NQ6Gf0SgqTOpHwYGyDnSZSkPSYkH5KcXpXNVZzkQvrcBU10D8m6QJqnWfnFYsvtt90axO9/yf1Y7EeIvH3+gQ9VkJezclfG3CJb41l4gg2JKqOCHdGBBo0RWNe9mKBKzhSodlXY+3bjXnbYUZOwn1+KxNdiFgzlSLW3jdJ0IuuEe8dmxiWJLP6CW5qed61wzHQwKhsJYlno/d/NfFu6RSBGKFmwPV4gZWDB46pOVJsOFNSd5XhzZjVpNyN1NOT6ws7nd6GQIDAQAB";
 
 /**
  * @brief Constructor for AndroidBilling
  * 
  * Initializes the Android billing instance and sets up the JavaProvider.
+ * Connects to the purchase signal from JavaProvider.
  */
-AndroidBilling::AndroidBilling()
-{
+
     _javaProvider = JavaProvider::instance();
+
+    connect(_javaProvider, &JavaProvider::sigPurchase,
+            this, &AndroidBilling::handlePurchaseReceived);
+
 }
 
-/**
- * @brief Initialize the Android billing system
- * 
- * This method initializes the Google Play Billing Library and prepares
- * the billing system for use. It should be called before any purchase
- * operations.
- */
 void AndroidBilling::init()
 {
-    // TO-DO: Implement Android billing initialization
+    _javaProvider->initBilling();
 }
 
 /**
@@ -44,22 +48,9 @@ void AndroidBilling::init()
  * 
  * @param itemID The unique identifier of the item to purchase
  */
-void AndroidBilling::getItem(const QString &itemID)
+void AndroidBilling::getItem(const QString& itemID)
 {
-    // TO-DO: Implement Android purchase request
-}
-
-/**
- * @brief Check if billing is supported
- * 
- * Returns true if Google Play Billing is available and properly configured.
- * 
- * @return true if billing is supported, false otherwise
- */
-bool AndroidBilling::isSupported()
-{
-    // TO-DO: Implement support check
-    return true;
+    _javaProvider->getBillingItem(itemID);
 }
 
 /**
@@ -87,8 +78,20 @@ void AndroidBilling::handlePurchaseReceived(QString id, QString token)
  */
 const char* AndroidBilling::getPublicKey()
 {
-    // TO-DO: Implement public key retrieval
-    return nullptr;
+    return publick_key;
 }
+
+/**
+ * @brief Check if billing is supported
+ * 
+ * Returns true if Google Play Billing is available and properly configured.
+ * 
+ * @return true if billing is supported, false otherwise
+ */
+bool AndroidBilling::isSupported()
+{
+    return true;
+}
+
 
 #endif

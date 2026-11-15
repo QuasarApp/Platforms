@@ -139,3 +139,4 @@ For support and questions, please open an issue on the [QuasarApp GitHub organiz
 
 Distributed under the GPLv3 software license, see the accompanying [LICENSE](./LICENSE) file. Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
+

@@ -1,9 +1,9 @@
-//
-// 2021-2027 QuasarApp.
-// Distributed under the GPLv3 software license, see the accompanying
-// Everyone is permitted to copy and distribute verbatim copies
-// of this license document, but changing it is not allowed.
-//
+//#
+//# Copyright (C) 2021-2027 QuasarApp.
+//# Distributed under the GPLv3 software license, see the accompanying
+//# Everyone is permitted to copy and distribute verbatim copies
+//# of this license document, but changing it is not allowed.
+//#
 
 #ifndef JAVAPROVIDER_H
 #define JAVAPROVIDER_H
@@ -31,10 +31,6 @@
  * @note This class inherits from QObject to support Qt signals.
  * @note Uses singleton pattern for instance management.
  * @note Thread-safe for JNI operations.
- * 
- * @subpage jni_concepts
- * 
- * @since 3.0.0
  */
 class JavaProvider : public QObject
 {
@@ -128,8 +124,7 @@ private:
      * @param token The validation token as jstring
      */
     static void purchaseReceived(JNIEnv *env, jobject thiz, jstring id, jstring token);
-}
+};
 
-#endif
-
+#endif // Q_OS_ANDROID
 #endif // JAVAPROVIDER_H

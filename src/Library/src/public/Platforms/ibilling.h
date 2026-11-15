@@ -1,9 +1,10 @@
-//
-// 2021-2027 QuasarApp.
-// Distributed under the GPLv3 software license, see the accompanying
-// Everyone is permitted to copy and distribute verbatim copies
-// of this license document, but changing it is not allowed.
-//
+//#
+//# Copyright (C) 2021-2027 QuasarApp.
+//# Distributed under the GPLv3 software license, see the accompanying
+//# Everyone is permitted to copy and distribute verbatim copies
+//# of this license document, but changing it is not allowed.
+//#
+
 
 #ifndef IBILLING_H
 #define IBILLING_H
@@ -20,8 +21,6 @@ namespace Platforms {
  * This struct holds basic information about an in-app purchase item.
  * It is used to communicate purchase details between platform-specific
  * billing implementations and the application layer.
- * 
- * @since 3.0.0
  */
 struct PLATFORMS_EXPORT Purchase {
     /**
@@ -60,10 +59,6 @@ struct PLATFORMS_EXPORT Purchase {
  * platform-specific billing logic while maintaining a consistent API.
  * 
  * @note This class inherits from QObject to support Qt signals and slots.
- * 
- * @subpage billing_concepts
- * 
- * @since 3.0.0
  */
 class PLATFORMS_EXPORT IBilling : public QObject
 {
@@ -85,10 +80,6 @@ public:
      * 
      * @return Pointer to IBilling implementation, or nullptr if unsupported
      * 
-     * @note This is a singleton-like pattern - the same instance is returned
-     *       across multiple calls for the current platform.
-     * @note Use this method after calling IBilling::instance() to get a pointer.
-     * 
      * @example
      * auto billing = Platforms::IBilling::instance();
      * if (billing && billing->isSupported()) {
@@ -105,7 +96,6 @@ public:
      * Platform-specific setup (licenses, permissions, etc.) is performed here.
      * 
      * @note This is a pure virtual method - must be implemented by derived classes
-     * @note Call this method before using getItem() or other billing functions
      */
     virtual void init() = 0;
 
@@ -159,13 +149,13 @@ signals:
      * @note This signal is thread-safe and can be handled from any thread
      * 
      * @example
-     * connect(billing, &IBilling::sigPurchaseReceived, this, [this](const Purchase &p) {
+     * connect(billing, &IBilling::sigPurchaseReceived, this, [this](const Platforms::Purchase &p) {
      *     // Process purchase
      * });
      */
-    void sigPurchaseReceived(const Purchase &purchase);
+    void sigPurchaseReceived(Platforms::Purchase);
 
-}
+} // namespace Platforms
 
 Q_DECLARE_METATYPE(Platforms::Purchase)
 
