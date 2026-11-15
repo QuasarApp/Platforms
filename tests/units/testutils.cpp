@@ -1,17 +1,9 @@
-/**
- * @file testutils.cpp
- * @brief Implementation of test utility functions
- * 
- * This file contains the implementation of utility functions for unit testing.
- * It provides helper methods for wait operations and connection handling.
- */
-
-/**
- * @copyright (C) 2020-2022 QuasarApp.
- * Distributed under the GPLv3 software license, see the accompanying
- * Everyone is permitted to copy and distribute verbatim copies
- * of this license document, changing it is not allowed.
- */
+//#
+//# Copyright (C) 2020-2027 QuasarApp.
+//# Distributed under the GPLv3 software license, see the accompanying
+//# Everyone is permitted to copy and distribute verbatim copies
+//# of this license document, but changing it is not allowed.
+//#
 
 #include "testutils.h"
 
